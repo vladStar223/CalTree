@@ -345,7 +345,7 @@ int main()
 {
     
     string x;
-	x = "((-1)*(1))";
+	x = "((-1)*(-1))";
 	//cout << add_m(x) << endl;
 	//x = "(" + x + ")";
 	NodeTree* root;
