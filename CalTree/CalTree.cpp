@@ -7,21 +7,137 @@
 using namespace std;
 struct NodeTree
 {
-    string data;
-    NodeTree* right;
-    NodeTree* left;
-    NodeTree* prev;
+    string data = "";
+    NodeTree* right = nullptr;
+    NodeTree* left = nullptr;
+    NodeTree* prev = nullptr;
+    /*
+    NodeTree(string data = "", NodeTree* right = nullptr, NodeTree* left = nullptr, NodeTree* prev = nullptr)
+    {
+        data = data;
+        left = left;
+        right = right;
+        prev = right;
+
+    }
+    */
 };
+void  postfix_print(NodeTree* node) {
+	if (node != nullptr) {
+		postfix_print(node->left);
+		postfix_print(node->right);
+		cout << node->data << " ";
+	}
+	else {
+		cout << " " << endl;
+	}
+	
+
+}
 const set<string> operations = { "+","-","*","/","^","(",")" }; // операции доступные сейчас 
 const set<string> one_operations = { "sin","cos","tg","sqrt" }; // операции доступные сейчас 
-string sort_tree_station( string ex) {
+pair<string, int> get_digit(string x, int i = 0) {
+	string xi;
+	pair<string, int> digit;
+	digit.first = "";
+	digit.second = 0;
+	for (i; i < x.size(); i++) {
+		xi = x[i];
+		if (isdigit(x[i])) {
+			digit.first = digit.first + xi;
+			digit.second = digit.second + 1;
+		}
+		else {
+			break;
+		}
+	}
+	return digit;
+
+}
+pair<string, int> get_text(string xv, int j = 0) {
+	string xi;
+	pair<string, int> text;
+	//text.first = "fuck";
+	text.first = "";
+	text.second = 0;
+	for (j; j < xv.size(); j++) {
+		xi = xv[j];
+		if (operations.count(xi) == 1) {
+			if (text.first.empty()) {
+				text.first = xi;
+				text.second = 1;
+			}
+			break;
+		}
+		if (!isdigit(xv[j])) {
+
+			text.first = text.first + xi;
+			text.second = text.second + 1;
+
+		}
+		else {
+			//cout << "dfdf" << endl;
+			//text.second = j;
+			break;
+		}
+	}
+	return text;
+}
+NodeTree* sort_tree_station(string expression) {
     NodeTree* root = new NodeTree();
+	int size = expression.size();
+	pair<string, int> digit;
+	pair<string, int> text;
+	string ops = "";
+	NodeTree* p = root;
+	for (int i = 0; i < size; i++)
+	{
+		if (!isdigit(expression[i])) {
+			text = get_text(expression, i);
+			string token = text.first;
+			if (token == "(") {
+				p->left = new NodeTree();
+				p->left->prev = p;
+				p = p->left;
+			}
+			else if (token == ")") {
+				if (p->prev != nullptr) {
+					p = p->prev;
+				}
+				
+			}
+			else {
+				p->data = token;
+				p->right = new NodeTree();
+				p->right->prev = p;
+				p = p->right;
+
+			}
+			i = i + text.second;
+		}
+		else {
+			digit = get_digit(expression, i);
+			p->data = digit.first;
+			if (p->prev != nullptr) {
+				p = p->prev;
+			}
+			
+			i = i + digit.second;
+
+		}
+	}
+	return root;
 }
 int main()
 {
     
     string x;
     x = "1+2+3";
+	NodeTree* root;
+	root = sort_tree_station(x);
+	postfix_print(root);
+	
+
 }
 
 // Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
