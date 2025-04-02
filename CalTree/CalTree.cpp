@@ -28,9 +28,6 @@ void  postfix_print(NodeTree* node) {
 		postfix_print(node->right);
 		cout << node->data << " ";
 	}
-	else {
-		cout << " " << endl;
-	}
 	
 
 }
@@ -90,7 +87,7 @@ NodeTree* sort_tree_station(string expression) {
 	pair<string, int> text;
 	string ops = "";
 	NodeTree* p = root;
-	for (int i = 0; i < size; i++)
+	for (int i = 0; i < size;)
 	{
 		if (!isdigit(expression[i])) {
 			text = get_text(expression, i);
@@ -118,6 +115,7 @@ NodeTree* sort_tree_station(string expression) {
 		else {
 			digit = get_digit(expression, i);
 			p->data = digit.first;
+			//cout << p->data << endl;
 			if (p->prev != nullptr) {
 				p = p->prev;
 			}
@@ -128,13 +126,35 @@ NodeTree* sort_tree_station(string expression) {
 	}
 	return root;
 }
+string add_m(string x) {
+	string ot = "(";
+	bool oper = false;
+	for (int i=0; i < x.size(); i++) {
+		if (isdigit(x[i])) {
+			if (oper == false) {
+				ot =  ot + "(" + x[i];
+			}
+			else {
+				ot = ot + x[i]+ ")" ;
+				oper = false;
+			}
+		}
+		else {
+			ot = ot + x[i];
+			oper = true;
+		}
+	}
+	return ot;
+}
+
 int main()
 {
     
     string x;
-    x = "1+2+3";
+	x = "1+2*3";
+	cout << add_m(x) << endl;
 	NodeTree* root;
-	root = sort_tree_station(x);
+	root = sort_tree_station(add_m(x));
 	postfix_print(root);
 	
 
