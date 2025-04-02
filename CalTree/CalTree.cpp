@@ -49,6 +49,7 @@ public:
 			p_top->node = p_top->node->next;
 			delete t;
 		}
+		//p_top->size = size - 1;
 	}
 
 	bool isEmpty(Stack*& p_top) {
@@ -152,9 +153,11 @@ NodeTree* sort_tree_station(string expression) {
 				p = p->left;
 			}
 			else if (token == ")") {
+			
 				if (p->prev != nullptr) {
 					p = p->prev;
 				}
+				
 				
 			}
 			else {
@@ -170,10 +173,11 @@ NodeTree* sort_tree_station(string expression) {
 			digit = get_digit(expression, i);
 			p->data = digit.first;
 			//cout << p->data << endl;
+			
 			if (p->prev != nullptr) {
 				p = p->prev;
 			}
-			
+		
 			i = i + digit.second;
 
 		}
@@ -220,7 +224,7 @@ int get_priority(string x, int p = 0) {
 		return 5;
 	}
 }
-void operationsa_procces(Stack* p_begin, string operation, bool one_opertion = false) {
+void operationsa_procces(Stack* &p_begin, string operation, bool one_opertion = false) {
 	if ((one_opertion == false && (stack1.get_size(p_begin) <= 1))) {
 		throw runtime_error("Error");
 	}
@@ -341,14 +345,14 @@ int main()
 {
     
     string x;
-	x = "(1+2+3)";
+	x = "((-1)*(1))";
 	//cout << add_m(x) << endl;
 	//x = "(" + x + ")";
 	NodeTree* root;
 	root = sort_tree_station(x);
 	postfix_print(root);
 	cout << " " << endl;
-	cout << stack_machine("3 - 1 - 9 *");
+	cout << stack_machine("1 - 1  *");
 	
 
 }
