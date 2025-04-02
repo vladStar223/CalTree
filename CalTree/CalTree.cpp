@@ -85,6 +85,35 @@ void  postfix_print(NodeTree* node) {
 	
 
 }
+void infix_print(NodeTree* node) {
+	if (node != nullptr) {
+		postfix_print(node->left);
+		cout << node->data << " ";
+		postfix_print(node->right);
+		
+	}
+}
+void prefix_print(NodeTree* node) {
+	if (node != nullptr) {
+		cout << node->data << " ";
+		postfix_print(node->left);
+		postfix_print(node->right);
+
+	}
+}
+void print_tree(NodeTree* node, int l = 0) {
+	if (node != nullptr) {
+		print_tree(node->right, l + 1);
+		for (int i = 0; i < l; i++) {
+			cout << " ";
+		}
+		cout << node->data;
+		print_tree(node->left, l + 1);
+	}
+	else {
+		cout << "" << endl;
+	}
+}
 Stack stack1;// обьект струкрутра стека
 const set<string> operations = { "+","-","*","/","^","(",")" }; // операции доступные сейчас 
 const set<string> one_operations = { "sin","cos","tg","sqrt" }; // операции доступные сейчас 
@@ -345,14 +374,17 @@ int main()
 {
     
     string x;
-	x = "((-1)*(-1))";
-	//cout << add_m(x) << endl;
+	x = "1+2+3";
+	string m = add_m(x);
+	cout << m << endl;
 	//x = "(" + x + ")";
 	NodeTree* root;
-	root = sort_tree_station(x);
+	root = sort_tree_station(m);
 	postfix_print(root);
 	cout << " " << endl;
-	cout << stack_machine("1 - 1  *");
+	print_tree(root);
+	cout << " " << endl;
+	cout << stack_machine("1 2 + 3 +");
 	
 
 }
